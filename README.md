@@ -17,11 +17,9 @@ O **ClimaTotal** é um site profissional de previsão do tempo focado na região
   - Condições esperadas
   - Ícones ilustrativos
 
-- **Recursos profissionais**:
-  - Mapa meteorológico do RS
+- **Recursos profissionais*
   - Alertas climáticos
   - Dicas para as condições atuais
-  - Imagem de satélite da região
 
 ## 🛠 Tecnologias Utilizadas
 
