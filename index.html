@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimaTotal | Previsão Meteorológica para Novo Hamburgo/RS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #1a252f;
+            --accent-color: #3498db;
+            --light-color: #ecf0f1;
+            --text-color: #333;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+            margin-right: 15px;
+            color: var(--accent-color);
+        }
+        
+        .logo h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 3px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        
+        nav ul li.active a {
+            color: var(--accent-color);
+        }
+        
+        nav ul li.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1580193769210-b8d1c049a7d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .hero-content {
+            width: 100%;
+            padding: 0 20px;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+        
+        .search-bar {
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            outline: none;
+            border: 1px solid #ddd;
+            border-right: none;
+        }
+        
+        .search-bar button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-bar button:hover {
+            background-color: #2980b9;
+        }
+        
+        .search-bar button i {
+            margin-right: 8px;
+        }
+        
+        .current-weather {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+        
+        .current-weather::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--accent-color);
+        }
+        
+        .location {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .location h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .location p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .weather-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        
+        .temperature {
+            font-size: 4.5rem;
+            font-weight: 300;
+            color: var(--primary-color);
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .temperature::after {
+            content: '°C';
+            position: absolute;
+            top: 10px;
+            right: -25px;
+            font-size: 2rem;
+        }
+        
+        .weather-icon {
+            font-size: 6rem;
+            color: var(--accent-color);
+            margin: 20px 0;
+        }
+        
+        .weather-details {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 350px;
+        }
+        
+        .weather-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .weather-details p {
+            margin: 12px 0;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .weather-details i {
+            width: 25px;
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .forecast {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-color);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+        
+        .forecast-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
+        
+        .forecast-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+        
+        .forecast-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .forecast-day {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .forecast-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .forecast-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin: 15px 0;
+        }
+        
+        .forecast-condition {
+            color: #555;
+            margin-bottom: 15px;
+            min-height: 40px;
+        }
+        
+        .forecast-temp {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        
+        .max-temp {
+            color: var(--danger-color);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .min-temp {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .weather-map {
+            margin-bottom: 60px;
+        }
+        
+        .map-container {
+            height: 500px;
+            background: #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ddd;
+        }
+        
+        .weather-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+        
+        .info-section {
+            display: flex;
+            margin-bottom: 60px;
+            gap: 30px;
+        }
+        
+        .info-card {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+        
+        .info-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .info-card p {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            line-height: 1.8;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .social-icons {
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            margin-right: 15px;
+            font-size: 1.3rem;
+            color: #bdc3c7;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 992px) {
+            .weather-main {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .weather-details {
+                margin-top: 30px;
+                max-width: 100%;
+            }
+            
+            .info-section {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 25px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 0 10px 10px;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .search-bar input {
+                border-radius: 4px;
+                border-right: 1px solid #ddd;
+                margin-bottom: 10px;
+            }
+            
+            .search-bar button {
+                border-radius: 4px;
+                justify-content: center;
+            }
+            
+            .temperature {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-cloud-sun"></i>
+                <div>
+                    <h1>ClimaTotal</h1>
+                    <p>Previsão meteorológica precisa</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#">Início</a></li>
+                    <li><a href="#">Previsão</a></li>
+                    <li><a href="#">Mapas</a></li>
+                    <li><a href="#">Radar</a></li>
+                    <li><a href="#">Notícias</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Previsão do Tempo em Novo Hamburgo/RS</h2>
+            <p>Informações meteorológicas precisas e atualizadas para o Vale do Sinos e região metropolitana</p>
+        </div>
+    </section>
+    
+    <main class="container">
+        <div class="search-bar">
+            <input type="text" placeholder="Digite uma cidade ou CEP..." id="search-input">
+            <button id="search-btn"><i class="fas fa-search"></i> Buscar Localidade</button>
+        </div>
+        
+        <!-- Imagem da cidade de Novo Hamburgo -->
+        <img src="" alt="Vista panorâmica de Novo Hamburgo" class="weather-image">
+        
+        <section class="current-weather">
+            <div class="location">
+                <h2>Novo Hamburgo, Rio Grande do Sul</h2>
+                <p id="current-date">Terça-feira, 18 de Junho de 2024 - 14:30</p>
+            </div>
+            
+            <div class="weather-main">
+                <div>
+                    <div class="temperature">15</div>
+                    <div class="weather-condition">Nublado</div>
+                </div>
+                
+                <div>
+                    <i class="fas fa-cloud weather-icon"></i>
+                </div>
+                
+                <div class="weather-details">
+                    <h3>Detalhes Meteorológicos</h3>
+                    <p><span class="detail-label"><i class="fas fa-temperature-low"></i> Sensação Térmica</span> <span>13°C</span></p>
+                    <p><span class="detail-label"><i class="fas fa-tint"></i> Umidade</span> <span>85%</span></p>
+                    <p><span class="detail-label"><i class="fas fa-wind"></i> Vento</span> <span>10 km/h NE</span></p>
+                    <p><span class="detail-label"><i class="fas fa-compress-arrows-alt"></i> Pressão</span> <span>1015 hPa</span></p>
+                    <p><span class="detail-label"><i class="fas fa-eye"></i> Visibilidade</span> <span>8 km</span></p>
+                    <p><span class="detail-label"><i class="fas fa-sun"></i> Nascer do sol</span> <span>07:15</span></p>
+                    <p><span class="detail-label"><i class="fas fa-moon"></i> Pôr do sol</span> <span>17:45</span></p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="forecast">
+            <h3 class="section-title">Previsão para os Próximos Dias</h3>
+            
+            <div class="forecast-cards">
+                <div class="forecast-card">
+                    <div class="forecast-day">Quarta-feira</div>
+                    <div class="forecast-date">19/06/2024</div>
+                    <i class="fas fa-cloud-rain forecast-icon"></i>
+                    <div class="forecast-condition">Chuva moderada durante o dia</div>
+                    <div class="forecast-temp">
+                        <span class="max-temp">14°</span>
+                        <span class="min-temp">8°</span>
+                    </div>
+                </div>
+                
+                <div class="forecast-card">
+                    <div class="forecast-day">Quinta-feira</div>
+                    <div class="forecast-date">20/06/2024</div>
+                    <i class="fas fa-cloud-sun forecast-icon"></i>
+                    <div class="forecast-condition">Nuvens dispersas com períodos de sol</div>
+                    <div class="forecast-temp">
+                        <span class="max-temp">16°</span>
+                        <span class="min-temp">7°</span>
+                    </div>
+                </div>
+                
+                <div class="forecast-card">
+                    <div class="forecast-day">Sexta-feira</div>
+                    <div class="forecast-date">21/06/2024</div>
+                    <i class="fas fa-sun forecast-icon"></i>
+                    <div class="forecast-condition">Sol com poucas nuvens</div>
+                    <div class="forecast-temp">
+                        <span class="max-temp">18°</span>
+                        <span class="min-temp">9°</span>
+                    </div>
+                </div>
+                
+                <div class="forecast-card">
+                    <div class="forecast-day">Sábado</div>
+                    <div class="forecast-date">22/06/2024</div>
+                    <i class="fas fa-sun forecast-icon"></i>
+                    <div class="forecast-condition">Dia ensolarado e ameno</div>
+                    <div class="forecast-temp">
+                        <span class="max-temp">20°</span>
+                        <span class="min-temp">11°</span>
+                    </div>
+                </div>
+                
+                <div class="forecast-card">
+                    <div class="forecast-day">Domingo</div>
+                    <div class="forecast-date">23/06/2024</div>
+                    <i class="fas fa-cloud-showers-heavy forecast-icon"></i>
+                    <div class="forecast-condition">Chuva intensa e tempestades</div>
+                    <div class="forecast-temp">
+                        <span class="max-temp">13°</span>
+                        <span class="min-temp">6°</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="info-section">
+            <div class="info-card">
+                <h3>Alerta Meteorológico</h3>
+                <p><i class="fas fa-exclamation-triangle" style="color: var(--danger-color); margin-right: 10px;"></i> A Defesa Civil emitiu alerta para chuvas intensas no Vale do Sinos a partir de sexta-feira.</p>
+                <p>Há risco de alagamentos em áreas baixas e transbordamento de rios. A população deve ficar atenta às atualizações.</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>Dicas para o Clima Atual</h3>
+                <p><i class="fas fa-umbrella" style="color: var(--accent-color); margin-right: 10px;"></i> Leve guarda-chuva ao sair, mesmo sem chuva iminente.</p>
+                <p><i class="fas fa-thermometer-half" style="color: var(--accent-color); margin-right: 10px;"></i> Use agasalhos adequados para as baixas temperaturas.</p>
+                <p><i class="fas fa-car" style="color: var(--accent-color); margin-right: 10px;"></i> Cuidado com a neblina nas estradas da região.</p>
+            </div>
+        </div>
+        
+        <section class="weather-map">
+            <h3 class="section-title">Mapa Meteorológico do Rio Grande do Sul</h3>
+            <div class="map-container">
+                <img src="" alt="Mapa do tempo no RS" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+        </section>
+        
+        <!-- Imagem de satélite -->
+        <img src="" alt="Imagem de satélite da região Sul" class="weather-image">
+    </main>
+
+    <script>
+        // Atualiza a data e hora atual
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('pt-BR', options);
+        }
+        
+        // Atualiza a cada minuto
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+        
+        // Função para buscar previsão do tempo
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const city = document.getElementById('search-input').value.trim();
+            if (city !== '') {
+                // Simulação de busca - em implementação real, chamaria a API
+                alert(`Sistema em desenvolvimento: A busca por "${city}" será implementada em breve.`);
+            }
+        });
+        
+        // Permitir busca ao pressionar Enter
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('search-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>
